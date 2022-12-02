@@ -14,4 +14,25 @@ public enum GameMove {
   public int getValue() {
     return value;
   }
+
+  public GameMove winAgainst() {
+    return switch (this) {
+      case Rock -> GameMove.Paper;
+      case Paper -> GameMove.Scissors;
+      case Scissors -> GameMove.Rock;
+    };
+  }
+
+  public GameMove drawAgainst() {
+    return this;
+  }
+
+  public GameMove loseAgainst() {
+    return switch (this) {
+      case Rock -> GameMove.Scissors;
+      case Paper -> GameMove.Rock;
+      case Scissors -> GameMove.Paper;
+    };
+  }
 }
+

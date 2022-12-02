@@ -12,24 +12,37 @@ public class RockPaperScissorsSim {
 
   public RockPaperScissorsGame game(final String line) {
     final String[] parts = line.split(" ");
-    return new RockPaperScissorsGame(gameMove(parts[0].trim()), gameMove(parts[1].trim()));
+    final GameMove opponentMove = gameMove(parts[0].trim());
+    final GameState gameState = gameState(parts[1].trim());
+    final GameMove myMove = whatsMyMove(opponentMove, gameState);
+    return new RockPaperScissorsGame(opponentMove, myMove);
+  }
+
+  private GameMove whatsMyMove(
+      final GameMove opponentMove,
+      final GameState gameState
+  ) {
+    return switch (gameState) {
+      case Draw -> opponentMove.drawAgainst();
+      case Win -> opponentMove.winAgainst();
+      case Lose -> opponentMove.loseAgainst();
+    };
   }
 
   public GameMove gameMove(final String str) {
-    switch(str) {
-      case "A":
-      case "X": {
-        return GameMove.Rock;
-      }
-      case "B":
-      case "Y": {
-        return GameMove.Paper;
-      }
-      case "C":
-      case "Z": {
-        return GameMove.Scissors;
-      }
-    }
-    return null;
+    return switch (str) {
+      case "A" -> GameMove.Rock;
+      case "B" -> GameMove.Paper;
+      case "C" -> GameMove.Scissors;
+      default -> null;
+    };
+  }
+
+  public GameState gameState(final String str) {
+    return switch (str) {
+      case "Y" -> GameState.Draw;
+      case "Z" -> GameState.Win;
+      default -> GameState.Lose;
+    };
   }
 }

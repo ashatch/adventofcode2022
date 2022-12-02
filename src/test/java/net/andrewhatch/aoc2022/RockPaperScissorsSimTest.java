@@ -15,11 +15,11 @@ class RockPaperScissorsSimTest {
         "A Y",
         "B X",
         "C Z"
-    ))).isEqualTo(15L);
+    ))).isEqualTo(12L);
   }
 
   @Test
   void puzzleInputTest() {
-    assertThat(sim.score(InputReader.readPuzzleInput())).isEqualTo(11906L);
+    assertThat(sim.score(InputReader.readPuzzleInput())).isEqualTo(11186L);
   }
 }
