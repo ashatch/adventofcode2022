@@ -1,18 +1,39 @@
 package net.andrewhatch.aoc2022;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
 public class RucksackAnalysis {
-  public long sumOfPriorities(final List<String> lines) {
+  public long partOneRucksackPriorities(final List<String> lines) {
     return lines.stream()
         .map(this::toRucksack)
         .map(this::itemsInBothCompartments)
         .map(this::priorities)
         .reduce(0L, Long::sum);
+  }
+
+  public long partTwoRucksackPriorities(final List<String> lines) {
+    return this.elfRucksacksInGroups(lines)
+        .stream()
+        .map(this::commonInRucksackGroup)
+        .map(this::priorities)
+        .reduce(0L, Long::sum);
+  }
+
+  public List<String> commonInRucksackGroup(List<String> group) {
+    final List<HashSet<String>> sets = group.stream()
+        .map(this::toRucksack)
+        .map(Rucksack::contents)
+        .map(HashSet::new)
+        .toList();
+
+    final Iterator<HashSet<String>> iterator = sets.iterator();
+    final HashSet<String> result = new HashSet(iterator.next());
+    while (iterator.hasNext()) {
+      result.retainAll(iterator.next());
+    }
+    return new ArrayList(result);
   }
 
   public List<String> itemsInBothCompartments(final Rucksack rucksack) {
@@ -22,6 +43,20 @@ public class RucksackAnalysis {
     first.retainAll(second);
 
     return new ArrayList<>(first);
+  }
+
+  private List<List<String>> elfRucksacksInGroups(final List<String> lines) {
+    final int chunkSize = 3;
+    final AtomicInteger counter = new AtomicInteger();
+    final List<List<String>> result = new ArrayList<>();
+
+    for (String line: lines) {
+      if (counter.getAndIncrement() % chunkSize == 0) {
+        result.add(new ArrayList<>());
+      }
+      result.get(result.size() - 1).add(line);
+    }
+    return result;
   }
 
   public Rucksack toRucksack(final String line) {
@@ -55,5 +90,11 @@ public class RucksackAnalysis {
   }
 
   public record Rucksack(List<String> firstCompartment, List<String> secondCompartment) {
+    public List<String> contents() {
+      final ArrayList<String> contents = new ArrayList<>();
+      contents.addAll(firstCompartment);
+      contents.addAll(secondCompartment);
+      return contents;
+    }
   }
 }

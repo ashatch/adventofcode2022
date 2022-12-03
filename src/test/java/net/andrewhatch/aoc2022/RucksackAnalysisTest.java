@@ -1,6 +1,5 @@
 package net.andrewhatch.aoc2022;
 
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
@@ -12,7 +11,7 @@ class RucksackAnalysisTest {
 
   @Test
   void rucksackExampleTest() {
-    assertThat(r.sumOfPriorities(List.of(
+    assertThat(r.partOneRucksackPriorities(List.of(
         "vJrwpWtwJgWrhcsFMMfFFhFp",
         "jqHRNqRjqzjGDLGLrsFMfFZSrLrFZsSL",
         "PmmdzqPrVvPwwTWBwg",
@@ -23,8 +22,40 @@ class RucksackAnalysisTest {
   }
 
   @Test
+  void commonInGroup() {
+    assertThat(r.commonInRucksackGroup(List.of(
+        "vJrwpWtwJgWrhcsFMMfFFhFp",
+        "jqHRNqRjqzjGDLGLrsFMfFZSrLrFZsSL",
+        "PmmdzqPrVvPwwTWBwg"
+    ))).isEqualTo(List.of("r"));
+
+    assertThat(r.commonInRucksackGroup(List.of(
+        "wMqvLMZHhHMvwLHjbvcjnnSBnvTQFn",
+        "ttgJtRGJQctTZtZT",
+        "CrZsJsPPZsGzwwsLwLmpwMDw"
+    ))).isEqualTo(List.of("Z"));
+  }
+
+  @Test
+  void thing() {
+    assertThat(r.partTwoRucksackPriorities(List.of(
+        "vJrwpWtwJgWrhcsFMMfFFhFp",
+        "jqHRNqRjqzjGDLGLrsFMfFZSrLrFZsSL",
+        "PmmdzqPrVvPwwTWBwg",
+        "wMqvLMZHhHMvwLHjbvcjnnSBnvTQFn",
+        "ttgJtRGJQctTZtZT",
+        "CrZsJsPPZsGzwwsLwLmpwMDw"
+    ))).isEqualTo(70L);
+  }
+
+  @Test
+  void thingPuzzle() {
+    assertThat(r.partTwoRucksackPriorities(InputReader.readPuzzleInput())).isEqualTo(2577L);
+  }
+
+  @Test
   void rucksackInputTest() {
-    assertThat(r.sumOfPriorities(InputReader.readPuzzleInput())).isEqualTo(7826L);
+    assertThat(r.partOneRucksackPriorities(InputReader.readPuzzleInput())).isEqualTo(7826L);
   }
 
   @Test
