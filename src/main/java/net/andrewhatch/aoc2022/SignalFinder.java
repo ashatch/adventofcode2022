@@ -20,15 +20,14 @@ public class SignalFinder {
       final char c = charArray[i];
       signalBuffer.add(c);
       if (allDifferent(signalBuffer.data(), bufferSize)) {
-        System.out.println(signalBuffer.data());
         return i + 1;
       }
     }
     return 0L;
   }
 
-  private boolean allDifferent(List<Character> data, int bufferSize) {
-    if (data.size() < bufferSize) {
+  private boolean allDifferent(List<Character> data, int minimum) {
+    if (data.size() < minimum) {
       return false;
     }
     return new HashSet<>(data).size() == data.size();
