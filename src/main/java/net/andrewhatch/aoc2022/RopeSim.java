@@ -1,16 +1,20 @@
 package net.andrewhatch.aoc2022;
 
 import java.util.*;
+import java.util.stream.IntStream;
 
 public class RopeSim {
-  long positionCount = 0;
-  Position headPosition = new Position(0, 0);
-  Position tailPosition = new Position(0, 0);
+  private final Position headPosition;
+  private final Position tailPosition;
+  private final List<Position> knots = new ArrayList<>();
 
-  private Map<Integer, Set<Integer>> visitedPlaces = new HashMap<>();
+  private final Map<Integer, Set<Integer>> visitedPlaces = new HashMap<>();
 
   public RopeSim() {
-    addPlaceVisited(headPosition);
+    IntStream.range(0, 10).forEach((it) -> knots.add(new Position(0, 0)));
+    headPosition = knots.get(0);
+    tailPosition = knots.get(knots.size() - 1);
+    addPlaceVisited(tailPosition);
   }
 
   private void addPlaceVisited(Position position) {
@@ -26,73 +30,98 @@ public class RopeSim {
         .reduce(0L, Long::sum);
   }
 
-  public void step(List<Movement> movements) {
+  public void step(final List<Movement> movements) {
     movements.forEach(this::step);
   }
 
-  public void step(Movement movement) {
+  public void step(final Movement movement) {
     for (int i = 0; i < movement.steps(); i++) {
+      moveHead(movement);
+      for (int x = 0; x < knots.size() - 1; x++) {
+        Position nextKnot = knots.get(x + 1);
+        updatePosition(knots.get(x), nextKnot);
+      }
+    }
+  }
+
+  private void moveHead(final Movement movement) {
       switch (movement.direction()) {
         case U -> headPosition.incY();
         case D -> headPosition.decY();
         case L -> headPosition.decX();
         case R -> headPosition.incX();
       }
-      updateTailPosition();
-    }
   }
 
-  private void checkRight() {
-    if (headPosition.getX() > tailPosition.getX() && headPosition.getX() - tailPosition.getX() > 1) {
-      tailPosition.incX();
-      if (headPosition.getY() != tailPosition.getY()) {
-        tailPosition.setY(headPosition.getY());
+  private void checkRight(Position from, Position to) {
+    if (from.getX() > to.getX() && from.getX() - to.getX() > 1) {
+      to.incX();
+      if (to.getY() < from.getY()) {
+        to.incY();
+      } else if (to.getY() > from.getY()) {
+        to.decY();
       }
-      addPlaceVisited(tailPosition);
-    }
-  }
-  private void checkLeft() {
-    if (headPosition.getX() < tailPosition.getX() && tailPosition.getX() - headPosition.getX() > 1) {
-      tailPosition.decX();
-      if (headPosition.getY() != tailPosition.getY()) {
-        tailPosition.setY(headPosition.getY());
+      if (to == tailPosition) {
+        addPlaceVisited(to);
       }
-      addPlaceVisited(tailPosition);
     }
   }
 
-  private void checkUp() {
-    if (headPosition.getY() > tailPosition.getY() && headPosition.getY() - tailPosition.getY() > 1) {
-      tailPosition.incY();
-      if (headPosition.getX() != tailPosition.getX()) {
-        tailPosition.setX(headPosition.getX());
+  private void checkLeft(Position from, Position to) {
+    if (from.getX() < to.getX() && to.getX() - from.getX() > 1) {
+      to.decX();
+      if (to.getY() < from.getY()) {
+        to.incY();
+      } else if (to.getY() > from.getY()) {
+        to.decY();
       }
-      addPlaceVisited(tailPosition);
-    }
-  }
-
-  private void checkDown() {
-    if (headPosition.getY() < tailPosition.getY() && tailPosition.getY() - headPosition.getY() > 1) {
-      tailPosition.decY();
-      if (headPosition.getX() != tailPosition.getX()) {
-        tailPosition.setX(headPosition.getX());
+      if (to == tailPosition) {
+        addPlaceVisited(to);
       }
-      addPlaceVisited(tailPosition);
     }
   }
 
-  private void updateTailPosition() {
-    checkLeft();
-    checkRight();
-    checkUp();
-    checkDown();
+  private void checkUp(Position from, Position to) {
+    if (from.getY() > to.getY() && from.getY() - to.getY() > 1) {
+      to.incY();
+      if (to.getX() < from.getX()) {
+        to.incX();
+      } else if (to.getX() > from.getX()) {
+        to.decX();
+      }
+      if (to == tailPosition) {
+        addPlaceVisited(to);
+      }
+    }
   }
 
-  public Position getHeadPosition() {
-    return headPosition;
+  private void checkDown(Position from, Position to) {
+    if (from.getY() < to.getY() && to.getY() - from.getY() > 1) {
+      to.decY();
+      if (to.getX() < from.getX()) {
+        to.incX();
+      } else if (to.getX() > from.getX()) {
+        to.decX();
+      }
+      if (to == tailPosition) {
+        addPlaceVisited(to);
+      }
+    }
   }
 
-  public Position getTailPosition() {
-    return tailPosition;
+  private void updatePosition(Position from, Position to) {
+    checkLeft(from, to);
+    checkRight(from, to);
+    checkUp(from, to);
+    checkDown(from, to);
+  }
+
+  public String toString() {
+    final DrawableGrid grid = new DrawableGrid(0, -5, '.');
+    for (int i = knots.size() - 1; i >= 0; i--) {
+      char label = i == 0 ? 'H' : ("" + i).charAt(0);
+      grid.put(label, knots.get(i).getX(), knots.get(i).getY());
+    }
+    return grid.toString();
   }
 }
