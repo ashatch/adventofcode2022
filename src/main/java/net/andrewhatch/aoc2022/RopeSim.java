@@ -117,7 +117,7 @@ public class RopeSim {
   }
 
   public String toString() {
-    final DrawableGrid grid = new DrawableGrid(0, -5, '.');
+    final DrawableGrid grid = new DrawableGrid(0, 0, '.');
     for (int i = knots.size() - 1; i >= 0; i--) {
       char label = i == 0 ? 'H' : ("" + i).charAt(0);
       grid.put(label, knots.get(i).getX(), knots.get(i).getY());

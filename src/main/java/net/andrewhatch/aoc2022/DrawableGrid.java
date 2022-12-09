@@ -3,13 +3,12 @@ package net.andrewhatch.aoc2022;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.function.Function;
 
 public class DrawableGrid {
 
-  final Map<Integer, Map<Integer, Character>> grid = new HashMap();
-  private int minY;
-  private int minX;
+  final Map<Integer, Map<Integer, Character>> grid = new HashMap<>();
+  private final int minY;
+  private final int minX;
   private final char background;
 
   public DrawableGrid(int minY, int minX, char background) {
