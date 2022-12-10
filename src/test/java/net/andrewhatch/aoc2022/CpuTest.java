@@ -8,7 +8,7 @@ import java.util.Set;
 import static org.assertj.core.api.Assertions.assertThat;
 
 class CpuTest {
-  final Cpu cpu = new Cpu(new Registers());
+  final Cpu cpu = new Cpu(new Registers(), new Crt());
 
   @Test
   void smallSampleInput() {
@@ -179,6 +179,8 @@ class CpuTest {
     ));
     cpu.executeInstructions(instructions);
     assertThat(cpu.getSumSignalStrength()).isEqualTo(13140L);
+
+    System.out.println(cpu.getCrt());
   }
 
   @Test
