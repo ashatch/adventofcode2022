@@ -15,7 +15,7 @@ public class Crt {
     return spriteString() + "\n" + displayString() + "\n---\n";
   }
 
-  private String spriteString() {
+  public String spriteString() {
     StringBuilder sb = new StringBuilder();
     for (int i = 0; i < sprite.length; i++) {
       sb.append(sprite[i]);
@@ -40,7 +40,7 @@ public class Crt {
   }
 
   public void setSpritePosition(int pos) {
-    pos = pos % 40;
+//    pos = pos % 40;
     for (int i = 0; i < sprite.length; i++) {
       if (i == pos) {
         sprite[i] = '#';

@@ -32,7 +32,6 @@ public class Cpu {
         this.currentInstruction.start(registers);
 
         this.crt.drawSpriteAtPos(clock);
-        System.out.println(this.crt);
 
         if (this.signalStrengthClocks.contains(clock)) {
           long signalStrength = (long) clock * this.registers.getRegisterX();

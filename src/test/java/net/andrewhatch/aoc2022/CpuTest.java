@@ -192,4 +192,20 @@ class CpuTest {
     cpu.executeInstructions(instructions);
     assertThat(cpu.getSumSignalStrength()).isEqualTo(14560L);
   }
+
+  @Test
+  void partTwouzzle() {
+    List<Instruction> instructions = new InstructionParser().parse(InputReader.readPuzzleInput());
+    cpu.setSignalStrengthClocks(Set.of(
+        20, 60, 100, 140, 180, 220
+    ));
+    cpu.executeInstructions(instructions);
+    assertThat(cpu.getCrt().displayString()).isEqualTo(
+        "####.#..#.###..#..#.####.###..#..#.#####\n" +
+        "#....#.#..#..#.#..#.#....#..#.#..#....#.\n" +
+        "###..##...#..#.####.###..#..#.#..#...#..\n" +
+        "#....#.#..###..#..#.#....###..#..#..#...\n" +
+        "#....#.#..#.#..#..#.#....#....#..#.#...#\n" +
+        "####.#..#.#..#.#..#.####.#.....##..#### \n");
+  }
 }
